@@ -1,0 +1,24 @@
+/* Custom Styles & Effects */
+.glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, #f0fdf4 0%, #f5f3ff 50%, #fff1f2 100%);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #e11d48 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.rule-card {
+    transition: all 0.3s ease;
+}
+
+.rule-card:hover {
+    transform: translateY(-6px);
+}
