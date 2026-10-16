@@ -68,7 +68,7 @@
     </div>
 
 
-    <!-- 2. ADMIN DASHBOARD SECTION (MUVAFFAQIYATLI KIRDAN SO'NG KO'RINADIGAN OYNA) -->
+    <!-- 2. ADMIN DASHBOARD SECTION -->
     <div id="admin-dashboard" class="hidden max-w-4xl w-full mx-auto space-y-8">
         <!-- Header -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-800/80 backdrop-blur-md p-6 rounded-3xl border border-slate-700 shadow-xl">
@@ -109,7 +109,7 @@
             </div>
         </div>
 
-        <!-- Actions Control Card -->
+        <!-- Manage Likes Control Card -->
         <div class="bg-slate-800/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-xl space-y-6">
             <h2 class="font-heading text-xl font-bold text-white flex items-center gap-2">
                 <i data-lucide="sliders" class="w-5 h-5 text-purple-400"></i> Manage Likes Data
@@ -122,13 +122,30 @@
                 </button>
             </div>
         </div>
+
+        <!-- Add New Friendship Tip Card -->
+        <div class="bg-slate-800/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-xl space-y-6">
+            <h2 class="font-heading text-xl font-bold text-white flex items-center gap-2">
+                <i data-lucide="lightbulb" class="w-5 h-5 text-amber-400"></i> Add New Friendship Tip
+            </h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">Tip Text (Ingliz tilida)</label>
+                    <textarea id="new-tip-input" rows="3" placeholder="Type a new friendship tip here... (e.g., Share your dreams with your best friend! ✨)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-purple-500 transition-all"></textarea>
+                </div>
+                <button onclick="addNewTip()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Tip to Database
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Script Logic -->
     <script>
         lucide.createIcons();
 
-        // 🔐 CREDENTIALS (Siz belgilagan login va parol)
+        // 🔐 CREDENTIALS
         const ADMIN_USER = "igamberdiyev19";
         const ADMIN_PASS = "Behruzbek12";
 
@@ -204,12 +221,32 @@
             }
             try {
                 const docRef = db.collection("campaign").doc("likesData");
-                await docRef.set({ count: parseInt(val) });
+                await docRef.set({ count: parseInt(val) }, { merge: true });
                 document.getElementById('admin-likes').innerText = val;
                 alert("Like soni muvaffaqiyatli yangilandi!");
                 document.getElementById('new-likes-input').value = "";
             } catch (e) {
                 alert("Xatolik yuz berdi!");
+            }
+        }
+
+        // Add New Friendship Tip
+        async function addNewTip() {
+            const tipText = document.getElementById('new-tip-input').value.trim();
+            if (!tipText) {
+                alert("Iltimos, maslahat matnini kiriting!");
+                return;
+            }
+            try {
+                // Yangi tipni Firestore bazasidagi 'tips' kolleksiyasiga qo'shamiz
+                await db.collection("campaign_tips").add({
+                    text: tipText,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("Yangi do'stlik maslahati bazaga muvaffaqiyatli qo'shildi! 🎉");
+                document.getElementById('new-tip-input').value = "";
+            } catch (e) {
+                alert("Maslahatni qo'shishda xatolik yuz berdi: " + e.message);
             }
         }
     </script>
