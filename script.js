@@ -244,7 +244,7 @@ function printPoster() {
 
 // --- VISITOR COMMENTS LOGIC ---
 
-// Load Comments from Firebase Firestore
+// Load Comments from Firebase Firestore with Admin Replies
 async function loadComments() {
     const listContainer = document.getElementById('comments-list');
     if (!listContainer) return;
@@ -264,14 +264,27 @@ async function loadComments() {
         snapshot.forEach(doc => {
             const data = doc.data();
             const commentCard = document.createElement('div');
-            commentCard.className = "bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-1.5";
+            commentCard.className = "bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-2";
             
+            let adminReplyHtml = "";
+            if (data.adminReply) {
+                adminReplyHtml = `
+                    <div class="mt-2 pl-3 border-l-2 border-purple-500 bg-purple-50/60 p-2.5 rounded-r-xl space-y-1">
+                        <span class="text-[11px] font-bold text-purple-700 flex items-center gap-1">
+                            🛡️ Admin Javobi:
+                        </span>
+                        <p class="text-slate-700 text-xs leading-relaxed">${escapeHtml(data.adminReply)}</p>
+                    </div>
+                `;
+            }
+
             commentCard.innerHTML = `
                 <div class="flex items-center justify-between">
                     <span class="font-heading font-bold text-sm text-purple-900">${escapeHtml(data.name)}</span>
-                    <span class="text-[10px] text-slate-400">Just now</span>
+                    <span class="text-[10px] text-slate-400">Visitor</span>
                 </div>
                 <p class="text-slate-600 text-sm leading-relaxed">${escapeHtml(data.text)}</p>
+                ${adminReplyHtml}
             `;
             listContainer.appendChild(commentCard);
         });
@@ -335,6 +348,7 @@ async function handleCommentSubmit(e) {
 
 // Simple security helper against HTML injection
 function escapeHtml(str) {
+    if (!str) return "";
     return str.replace(/&/g, "&amp;")
               .replace(/</g, "&lt;")
               .replace(/>/g, "&gt;")
