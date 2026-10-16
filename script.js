@@ -242,9 +242,9 @@ function printPoster() {
     window.print();
 }
 
-// --- VISITOR COMMENTS LOGIC ---
+// --- VISITOR COMMENTS & VOTING LOGIC ---
 
-// Load Comments from Firebase Firestore with Admin Replies
+// Load Comments from Firebase Firestore with Likes, Dislikes, and Admin Replies
 async function loadComments() {
     const listContainer = document.getElementById('comments-list');
     if (!listContainer) return;
@@ -263,6 +263,7 @@ async function loadComments() {
 
         snapshot.forEach(doc => {
             const data = doc.data();
+            const commentId = doc.id;
             const commentCard = document.createElement('div');
             commentCard.className = "bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-2";
             
@@ -278,6 +279,9 @@ async function loadComments() {
                 `;
             }
 
+            const likesCount = data.likes || 0;
+            const dislikesCount = data.dislikes || 0;
+
             commentCard.innerHTML = `
                 <div class="flex items-center justify-between">
                     <span class="font-heading font-bold text-sm text-purple-900">${escapeHtml(data.name)}</span>
@@ -285,11 +289,52 @@ async function loadComments() {
                 </div>
                 <p class="text-slate-600 text-sm leading-relaxed">${escapeHtml(data.text)}</p>
                 ${adminReplyHtml}
+                
+                <!-- Like & Dislike Buttons -->
+                <div class="flex items-center gap-4 pt-2 border-t border-slate-100 text-xs text-slate-600">
+                    <button onclick="voteComment('${commentId}', 'likes')" class="flex items-center gap-1.5 hover:text-purple-600 transition-colors bg-slate-50 hover:bg-purple-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                        <span>👍</span> <span id="likes-${commentId}" class="font-bold">${likesCount}</span>
+                    </button>
+                    <button onclick="voteComment('${commentId}', 'dislikes')" class="flex items-center gap-1.5 hover:text-rose-600 transition-colors bg-slate-50 hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                        <span>👎</span> <span id="dislikes-${commentId}" class="font-bold">${dislikesCount}</span>
+                    </button>
+                </div>
             `;
             listContainer.appendChild(commentCard);
         });
     } catch (e) {
         listContainer.innerHTML = `<p class="text-rose-400 text-sm text-center py-4">Failed to load comments.</p>`;
+    }
+}
+
+// Handle Like / Dislike Voting with Device Restriction
+async function voteComment(commentId, type) {
+    const voteKey = `voted_${commentId}`;
+    
+    if (localStorage.getItem(voteKey)) {
+        showToast("Siz bu izohga allaqachon ovoz bergansiz! ⚠️");
+        return;
+    }
+
+    try {
+        const commentRef = db.collection("campaign_comments").doc(commentId);
+        
+        await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(commentRef);
+            if (!doc.exists) {
+                throw new Error("Izoh topilmadi!");
+            }
+            
+            const currentVal = doc.data()[type] || 0;
+            transaction.update(commentRef, { [type]: currentVal + 1 });
+        });
+
+        localStorage.setItem(voteKey, "true");
+
+        showToast("Ovozingiz qabul qilindi! 🎉");
+        loadComments();
+    } catch (e) {
+        alert("Xatolik yuz berdi: " + e.message);
     }
 }
 
@@ -333,6 +378,8 @@ async function handleCommentSubmit(e) {
         await db.collection("campaign_comments").add({
             name: name,
             text: text,
+            likes: 0,
+            dislikes: 0,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
