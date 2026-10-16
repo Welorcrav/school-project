@@ -307,13 +307,11 @@ async function loadComments() {
     }
 }
 
-// Handle Like / Dislike Voting with Device Restriction
-// Handle Like / Dislike Voting with Switching Support
+// Handle Like / Dislike Voting with Switching Support (Like <-> Dislike)
 async function voteComment(commentId, newType) {
-    const voteKey = `vote_type_${commentId}`; // 'likes' yoki 'dislikes' saqlanadi
-    const previousVote = localStorage.getItem(voteKey); // Oldin nima bosgani
+    const voteKey = `vote_type_${commentId}`; 
+    const previousVote = localStorage.getItem(voteKey); 
 
-    // Agar foydalanuvchi aynan o'sha tugmani qayta bossa (masalan, yanalike)
     if (previousVote === newType) {
         showToast("Siz allaqachon bu tugmani bosgansiz! ⚠️");
         return;
@@ -332,64 +330,36 @@ async function voteComment(commentId, newType) {
             let likes = data.likes || 0;
             let dislikes = data.dislikes || 0;
 
-            // Agar oldin boshqa narsa bosgan bo'lsa, o'shandan 1 ta ayiramiz
             if (previousVote === 'likes') {
                 likes = Math.max(0, likes - 1);
             } else if (previousVote === 'dislikes') {
                 dislikes = Math.max(0, dislikes - 1);
             }
 
-            // Yangi ovozni qo'shamiz
             if (newType === 'likes') {
                 likes += 1;
             } else if (newType === 'dislikes') {
                 dislikes += 1;
             }
 
-            // Bazaga yangilangan qiymatlarni yozamiz
             transaction.update(commentRef, { 
                 likes: likes, 
                 dislikes: dislikes 
             });
         });
 
-        // Yangi ovoz turini localStorage'ga saqlab qo'yamiz
         localStorage.setItem(voteKey, newType);
 
         showToast("Ovozingiz o'zgartirildi! 🎉");
-        loadComments(); // Izohlarni yangilash
+        loadComments();
     } catch (e) {
         alert("Xatolik yuz berdi: " + e.message);
     }
 }
 
-// Check if device already left a comment
-function checkCommentStatus() {
-    const formBox = document.getElementById('comment-form-box');
-    if (!formBox) return;
-
-    if (localStorage.getItem("hasLeftComment") === "true") {
-        formBox.innerHTML = `
-            <div class="text-center py-6 bg-purple-50/70 rounded-2xl border border-purple-100 space-y-2">
-                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                    <i data-lucide="check-circle" class="w-6 h-6"></i>
-                </div>
-                <h4 class="font-heading font-bold text-slate-900 text-base">Thank you for your comment!</h4>
-                <p class="text-slate-600 text-xs">Siz bu qurilmadan allaqachon o'z izohingizni qoldirgansiz. ✅</p>
-            </div>
-        `;
-        lucide.createIcons();
-    }
-}
-
-// Handle New Comment Submission
+// Handle New Comment Submission (Istagancha izoh yozish mumkin)
 async function handleCommentSubmit(e) {
     e.preventDefault();
-    
-    if (localStorage.getItem("hasLeftComment") === "true") {
-        alert("Siz allaqachon izoh yozgansiz!");
-        return;
-    }
 
     const nameInput = document.getElementById('comment-name');
     const textInput = document.getElementById('comment-text');
@@ -408,11 +378,10 @@ async function handleCommentSubmit(e) {
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        localStorage.setItem("hasLeftComment", "true");
-
+        nameInput.value = "";
+        textInput.value = "";
         showToast("Comment posted successfully! 🎉");
         loadComments();
-        checkCommentStatus();
     } catch (e) {
         alert("Xatolik yuz berdi: " + e.message);
     }
@@ -428,6 +397,5 @@ function escapeHtml(str) {
               .replace(/'/g, "&#039;");
 }
 
-// Automatically load comments and check status when page opens
+// Automatically load comments when page opens
 loadComments();
-checkCommentStatus();
