@@ -13,7 +13,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Fetch Likes from Firebase on load
+// Fetch Likes from Firebase on load & check status
 async function fetchLikes() {
     try {
         const doc = await db.collection("campaign").doc("likesData").get();
@@ -25,30 +25,60 @@ async function fetchLikes() {
     } catch (e) {
         document.getElementById('like-count').innerText = "15";
     }
+
+    // Agar bu qurilmadan oldin like bosilgan bo'lsa, tugmani stilini o'zgartiramiz
+    if (localStorage.getItem("hasLikedCampaign") === "true") {
+        const likeBtn = document.querySelector("button[onclick='handleLike()']");
+        if (likeBtn) {
+            likeBtn.classList.add("opacity-75", "cursor-not-allowed");
+            likeBtn.title = "Siz bu kampaniyaga allaqachon ovoz bergansiz!";
+        }
+    }
 }
 fetchLikes();
 
-// Handle Like Click & Update Firebase
+// Handle Like Click & Update Firebase (Bitta qurilmadan faqat 1 marta)
 async function handleLike() {
+    // Tekshirish: Bu qurilma oldin like bosganmi?
+    if (localStorage.getItem("hasLikedCampaign") === "true") {
+        showToast("Siz bu kampaniyaga allaqachon like bosgansiz! ⚠️");
+        return;
+    }
+
     try {
         const docRef = db.collection("campaign").doc("likesData");
-        const doc = await docRef.get();
-        let current = 0;
-        if (doc.exists) {
-            current = doc.data().count || 0;
-        }
-        const newCount = current + 1;
-        document.getElementById('like-count').innerText = newCount;
         
+        await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(docRef);
+            let current = 0;
+            if (doc.exists) {
+                current = doc.data().count || 0;
+            }
+            const newCount = current + 1;
+            
+            transaction.set(docRef, { count: newCount });
+            document.getElementById('like-count').innerText = newCount;
+        });
+
+        // Qurilma xotirasiga like bosilganini yozib qo'yamiz
+        localStorage.setItem("hasLikedCampaign", "true");
+
         confetti({
             particleCount: 80,
             spread: 70,
             origin: { y: 0.6 }
         });
 
-        await docRef.set({ count: newCount });
+        showToast("Support uchun rahmat! ❤️");
+        
+        // Tugmani faol emas holatga keltirish
+        const likeBtn = document.querySelector("button[onclick='handleLike()']");
+        if (likeBtn) {
+            likeBtn.classList.add("opacity-75", "cursor-not-allowed");
+        }
+
     } catch (e) {
-        showToast("Liked!");
+        showToast("Xatolik yuz berdi!");
     }
 }
 
@@ -244,7 +274,6 @@ function printPoster() {
 
 // --- VISITOR COMMENTS & VOTING LOGIC ---
 
-// Load Comments from Firebase Firestore with Likes, Dislikes, and Admin Replies
 async function loadComments() {
     const listContainer = document.getElementById('comments-list');
     if (!listContainer) return;
@@ -290,7 +319,6 @@ async function loadComments() {
                 <p class="text-slate-600 text-sm leading-relaxed">${escapeHtml(data.text)}</p>
                 ${adminReplyHtml}
                 
-                <!-- Like & Dislike Buttons -->
                 <div class="flex items-center gap-4 pt-2 border-t border-slate-100 text-xs text-slate-600">
                     <button onclick="voteComment('${commentId}', 'likes')" class="flex items-center gap-1.5 hover:text-purple-600 transition-colors bg-slate-50 hover:bg-purple-50 px-3 py-1.5 rounded-xl border border-slate-200">
                         <span>👍</span> <span id="likes-${commentId}" class="font-bold">${likesCount}</span>
@@ -307,7 +335,6 @@ async function loadComments() {
     }
 }
 
-// Handle Like / Dislike Voting with Switching Support (Like <-> Dislike)
 async function voteComment(commentId, newType) {
     const voteKey = `vote_type_${commentId}`; 
     const previousVote = localStorage.getItem(voteKey); 
@@ -357,7 +384,6 @@ async function voteComment(commentId, newType) {
     }
 }
 
-// Handle New Comment Submission (Istagancha izoh yozish mumkin)
 async function handleCommentSubmit(e) {
     e.preventDefault();
 
@@ -387,7 +413,6 @@ async function handleCommentSubmit(e) {
     }
 }
 
-// Simple security helper against HTML injection
 function escapeHtml(str) {
     if (!str) return "";
     return str.replace(/&/g, "&amp;")
@@ -397,5 +422,4 @@ function escapeHtml(str) {
               .replace(/'/g, "&#039;");
 }
 
-// Automatically load comments when page opens
 loadComments();
