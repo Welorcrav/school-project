@@ -1,6 +1,6 @@
 lucide.createIcons();
 
-// FIREBASE CONFIGURATION (Haqiqiy kalitlar kiritildi)
+// FIREBASE CONFIGURATION
 const firebaseConfig = {
     apiKey: "AIzaSyAgJnEOr1ARCk0iBMpD6NsNiIldPmyi8Ig",
     authDomain: "english-project-17.firebaseapp.com",
@@ -40,7 +40,6 @@ async function handleLike() {
         const newCount = current + 1;
         document.getElementById('like-count').innerText = newCount;
         
-        // Confetti animation effect
         confetti({
             particleCount: 80,
             spread: 70,
@@ -53,14 +52,31 @@ async function handleLike() {
     }
 }
 
-// Random Tip Generator
-const tips = [
+// Default local tips & Firebase dynamic tips
+let tips = [
     "A good friend is like a sunshine on a cloudy day! ☀️",
     "Always share your snacks with your best friend! 🍫",
     "Listen more than you speak when your friend is sad. 👂",
     "A small smile can make your friend's day better! 😊",
     "True friends grow and learn together! 📚"
 ];
+
+// Load dynamic tips from Firebase admin panel
+async function loadFirebaseTips() {
+    try {
+        const snapshot = await db.collection("campaign_tips").get();
+        snapshot.forEach(doc => {
+            if (doc.data().text) {
+                tips.push(doc.data().text);
+            }
+        });
+    } catch (e) {
+        console.log("Using default tips");
+    }
+}
+loadFirebaseTips();
+
+// Random Tip Generator
 function generateRandomTip() {
     const randomIndex = Math.floor(Math.random() * tips.length);
     document.getElementById('fortune-text').innerText = `"${tips[randomIndex]}"`;
@@ -225,3 +241,107 @@ function togglePosterModal() {
 function printPoster() {
     window.print();
 }
+
+// --- VISITOR COMMENTS LOGIC ---
+
+// Load Comments from Firebase Firestore
+async function loadComments() {
+    const listContainer = document.getElementById('comments-list');
+    if (!listContainer) return;
+
+    try {
+        const snapshot = await db.collection("campaign_comments")
+            .orderBy("createdAt", "desc")
+            .get();
+
+        listContainer.innerHTML = "";
+        
+        if (snapshot.empty) {
+            listContainer.innerHTML = `<p class="text-slate-400 text-sm italic text-center py-4">No comments yet. Be the first to write one! ✨</p>`;
+            return;
+        }
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            const commentCard = document.createElement('div');
+            commentCard.className = "bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-1.5";
+            
+            commentCard.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="font-heading font-bold text-sm text-purple-900">${escapeHtml(data.name)}</span>
+                    <span class="text-[10px] text-slate-400">Just now</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">${escapeHtml(data.text)}</p>
+            `;
+            listContainer.appendChild(commentCard);
+        });
+    } catch (e) {
+        listContainer.innerHTML = `<p class="text-rose-400 text-sm text-center py-4">Failed to load comments.</p>`;
+    }
+}
+
+// Check if device already left a comment
+function checkCommentStatus() {
+    const formBox = document.getElementById('comment-form-box');
+    if (!formBox) return;
+
+    if (localStorage.getItem("hasLeftComment") === "true") {
+        formBox.innerHTML = `
+            <div class="text-center py-6 bg-purple-50/70 rounded-2xl border border-purple-100 space-y-2">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                </div>
+                <h4 class="font-heading font-bold text-slate-900 text-base">Thank you for your comment!</h4>
+                <p class="text-slate-600 text-xs">Siz bu qurilmadan allaqachon o'z izohingizni qoldirgansiz. ✅</p>
+            </div>
+        `;
+        lucide.createIcons();
+    }
+}
+
+// Handle New Comment Submission
+async function handleCommentSubmit(e) {
+    e.preventDefault();
+    
+    if (localStorage.getItem("hasLeftComment") === "true") {
+        alert("Siz allaqachon izoh yozgansiz!");
+        return;
+    }
+
+    const nameInput = document.getElementById('comment-name');
+    const textInput = document.getElementById('comment-text');
+
+    const name = nameInput.value.trim();
+    const text = textInput.value.trim();
+
+    if (!name || !text) return;
+
+    try {
+        await db.collection("campaign_comments").add({
+            name: name,
+            text: text,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        localStorage.setItem("hasLeftComment", "true");
+
+        showToast("Comment posted successfully! 🎉");
+        loadComments();
+        checkCommentStatus();
+    } catch (e) {
+        alert("Xatolik yuz berdi: " + e.message);
+    }
+}
+
+// Simple security helper against HTML injection
+function escapeHtml(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;")
+              .replace(/'/g, "&#039;");
+}
+
+// Automatically load comments and check status when page opens
+loadComments();
+checkCommentStatus();

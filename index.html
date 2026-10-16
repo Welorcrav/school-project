@@ -1,18 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Be a Good Friend - Campaign</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Canvas Confetti Library -->
@@ -21,658 +18,389 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ["Inter", "sans-serif"],
-              heading: ["Outfit", "sans-serif"],
-            },
-          },
-        },
-      };
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
     </script>
     <!-- External CSS Connection -->
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body
-    class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between gradient-bg"
-  >
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between gradient-bg">
+
     <!-- Toast Notification -->
-    <div
-      id="toast"
-      class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700"
-    >
-      <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
-      <span id="toast-msg" class="text-sm font-medium">Done!</span>
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-msg" class="text-sm font-medium">Done!</span>
     </div>
 
     <!-- Navigation Header -->
-    <header
-      class="sticky top-0 z-40 bg-white/75 backdrop-blur-md border-b border-purple-100"
-    >
-      <div
-        class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between"
-      >
-        <a href="#" class="flex items-center gap-2.5">
-          <div
-            class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-rose-500 flex items-center justify-center text-white shadow-md"
-          >
-            <i data-lucide="heart" class="w-5 h-5 fill-current"></i>
-          </div>
-          <span
-            class="font-heading font-bold text-xl tracking-tight text-slate-900"
-            >Good Friends</span
-          >
-        </a>
-        <nav
-          class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600"
-        >
-          <a href="#rules" class="hover:text-purple-600 transition-colors"
-            >5 Rules</a
-          >
-          <a href="#advice" class="hover:text-purple-600 transition-colors"
-            >3 Tips</a
-          >
-          <a href="#fortune" class="hover:text-purple-600 transition-colors"
-            >Random Tip</a
-          >
-          <a href="#speech" class="hover:text-purple-600 transition-colors"
-            >Speech</a
-          >
-          <a href="#quiz" class="hover:text-purple-600 transition-colors"
-            >Quiz</a
-          >
-          <a href="#team" class="hover:text-purple-600 transition-colors"
-            >Team</a
-          >
-        </nav>
-        <a
-          href="#quiz"
-          class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl shadow-md transition-all"
-        >
-          <i data-lucide="sparkles" class="w-4 h-4"></i>
-          Test Yourself
-        </a>
-      </div>
+    <header class="sticky top-0 z-40 bg-white/75 backdrop-blur-md border-b border-purple-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-600 to-rose-500 flex items-center justify-center text-white shadow-md">
+                    <i data-lucide="heart" class="w-5 h-5 fill-current"></i>
+                </div>
+                <span class="font-heading font-bold text-xl tracking-tight text-slate-900">Good Friends</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#rules" class="hover:text-purple-600 transition-colors">5 Rules</a>
+                <a href="#advice" class="hover:text-purple-600 transition-colors">3 Tips</a>
+                <a href="#fortune" class="hover:text-purple-600 transition-colors">Random Tip</a>
+                <a href="#speech" class="hover:text-purple-600 transition-colors">Speech</a>
+                <a href="#quiz" class="hover:text-purple-600 transition-colors">Quiz</a>
+                <a href="#comments" class="hover:text-purple-600 transition-colors">Comments</a>
+                <a href="#team" class="hover:text-purple-600 transition-colors">Team</a>
+            </nav>
+            <a href="#quiz" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl shadow-md transition-all">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                Test Yourself
+            </a>
+        </div>
     </header>
 
     <main class="flex-grow">
-      <!-- 1. HERO SECTION -->
-      <section
-        class="relative pt-12 pb-20 px-4 sm:px-6 max-w-6xl mx-auto text-center"
-      >
-        <div
-          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-100 border border-purple-200 text-purple-800 text-xs sm:text-sm font-semibold mb-6"
-        >
-          <i data-lucide="award" class="w-4 h-4 text-purple-600"></i>
-          <span>School Project • Option C</span>
-        </div>
-
-        <h1
-          class="font-heading font-extrabold text-4xl sm:text-6xl md:text-7xl tracking-tight text-slate-900 mb-6 leading-tight"
-        >
-          Be a <span class="gradient-text">Better Friend!</span>
-        </h1>
-
-        <p
-          class="text-lg sm:text-2xl text-slate-600 max-w-2xl mx-auto mb-6 font-light italic"
-        >
-          "Be a good friend, make a happy world!"
-        </p>
-
-        <div
-          class="inline-block bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs sm:text-sm font-medium px-4 py-2 rounded-xl mb-8 shadow-sm"
-        >
-          💻 Web page created by
-          <strong class="text-purple-700">11-"A" class</strong>
-        </div>
-
-        <!-- Firebase Live Like Button -->
-        <div class="mb-8 flex justify-center">
-          <button
-            onclick="handleLike()"
-            class="inline-flex items-center gap-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-semibold px-6 py-3 rounded-2xl shadow-sm transition-all transform active:scale-95"
-          >
-            <i
-              data-lucide="heart"
-              class="w-5 h-5 fill-rose-500 text-rose-500 animate-pulse"
-            ></i>
-            <span>Support Campaign:</span>
-            <span
-              id="like-count"
-              class="bg-rose-600 text-white text-xs px-2.5 py-1 rounded-full"
-              >...</span
-            >
-          </button>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="#rules"
-            class="bg-slate-900 hover:bg-slate-800 text-white font-medium px-6 py-3.5 rounded-2xl shadow-lg transition-all flex items-center gap-2"
-          >
-            <i data-lucide="book-open" class="w-5 h-5"></i>
-            Read Rules
-          </a>
-          <button
-            onclick="togglePosterModal()"
-            class="glass-card hover:bg-white text-slate-700 font-medium px-6 py-3.5 rounded-2xl border border-slate-200 shadow-sm transition-all flex items-center gap-2"
-          >
-            <i
-              data-lucide="layout-template"
-              class="w-5 h-5 text-purple-600"
-            ></i>
-            View Poster
-          </button>
-        </div>
-      </section>
-
-      <!-- 2. FIVE RULES SECTION -->
-      <section id="rules" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-          <span
-            class="text-purple-600 font-semibold text-sm uppercase tracking-wider"
-            >Main Rules</span
-          >
-          <h2
-            class="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mt-1"
-          >
-            5 Friendship Rules
-          </h2>
-          <p class="text-slate-600 mt-2 text-sm">
-            Simple rules for a strong friendship.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div
-            class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm"
-          >
-            <div
-              class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-5 font-bold text-xl"
-            >
-              <i data-lucide="ear" class="w-6 h-6"></i>
+        <!-- 1. HERO SECTION -->
+        <section class="relative pt-12 pb-20 px-4 sm:px-6 max-w-6xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-100 border border-purple-200 text-purple-800 text-xs sm:text-sm font-semibold mb-6">
+                <i data-lucide="award" class="w-4 h-4 text-purple-600"></i>
+                <span>School Project • Option C</span>
             </div>
-            <span
-              class="text-xs font-bold uppercase tracking-wider text-indigo-600"
-              >Rule 1</span
-            >
-            <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">
-              Listen to your friend
-            </h3>
-            <p class="text-slate-600 text-sm leading-relaxed">
-              Always listen carefully when your friend is speaking to you.
+            
+            <h1 class="font-heading font-extrabold text-4xl sm:text-6xl md:text-7xl tracking-tight text-slate-900 mb-6 leading-tight">
+                Be a <span class="gradient-text">Better Friend!</span>
+            </h1>
+            
+            <p class="text-lg sm:text-2xl text-slate-600 max-w-2xl mx-auto mb-6 font-light italic">
+                "Be a good friend, make a happy world!"
             </p>
-          </div>
 
-          <div
-            class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm"
-          >
-            <div
-              class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-5 font-bold text-xl"
-            >
-              <i data-lucide="shield-check" class="w-6 h-6"></i>
-            </div>
-            <span
-              class="text-xs font-bold uppercase tracking-wider text-emerald-600"
-              >Rule 2</span
-            >
-            <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">
-              Always be honest
-            </h3>
-            <p class="text-slate-600 text-sm leading-relaxed">
-              Do not lie to your friend. Trust is very important.
-            </p>
-          </div>
-
-          <div
-            class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm"
-          >
-            <div
-              class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mb-5 font-bold text-xl"
-            >
-              <i data-lucide="smile" class="w-6 h-6"></i>
-            </div>
-            <span
-              class="text-xs font-bold uppercase tracking-wider text-amber-600"
-              >Rule 3</span
-            >
-            <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">
-              Respect each other
-            </h3>
-            <p class="text-slate-600 text-sm leading-relaxed">
-              Respect your friend's personal space and choices.
-            </p>
-          </div>
-
-          <div
-            class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm"
-          >
-            <div
-              class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-5 font-bold text-xl"
-            >
-              <i data-lucide="hand-heart" class="w-6 h-6"></i>
-            </div>
-            <span
-              class="text-xs font-bold uppercase tracking-wider text-rose-600"
-              >Rule 4</span
-            >
-            <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">
-              Help your friend
-            </h3>
-            <p class="text-slate-600 text-sm leading-relaxed">
-              Support your friend when they have problems or hard times.
-            </p>
-          </div>
-
-          <div
-            class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm sm:col-span-2 lg:col-span-1"
-          >
-            <div
-              class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-5 font-bold text-xl"
-            >
-              <i data-lucide="lock" class="w-6 h-6"></i>
-            </div>
-            <span
-              class="text-xs font-bold uppercase tracking-wider text-purple-600"
-              >Rule 5</span
-            >
-            <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">
-              Keep secrets safe
-            </h3>
-            <p class="text-slate-600 text-sm leading-relaxed">
-              Never tell your friend's secrets to other people.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- RANDOM TIP GENERATOR -->
-      <section
-        id="fortune"
-        class="py-12 px-4 sm:px-6 max-w-3xl mx-auto text-center"
-      >
-        <div
-          class="glass-card p-8 rounded-3xl border border-purple-200 shadow-lg space-y-4"
-        >
-          <span
-            class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-100 px-3 py-1 rounded-full"
-            >Interactive Feature</span
-          >
-          <h3 class="font-heading font-bold text-2xl text-slate-900">
-            Random Friendship Tip
-          </h3>
-          <p id="fortune-text" class="text-slate-600 italic text-base">
-            "Click the button below to get a daily friendship advice!"
-          </p>
-          <button
-            onclick="generateRandomTip()"
-            class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-md transition-all"
-          >
-            Get New Tip 💡
-          </button>
-        </div>
-      </section>
-
-      <!-- 3. THREE ADVICE SECTION -->
-      <section id="advice" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
-        <div
-          class="bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-2xl"
-        >
-          <div class="text-center max-w-xl mx-auto mb-10">
-            <span
-              class="bg-purple-500/30 text-purple-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider border border-purple-400/30"
-              >Useful Tips</span
-            >
-            <h2 class="font-heading text-3xl sm:text-4xl font-bold mt-2">
-              3 Good Tips
-            </h2>
-            <p class="text-slate-300 text-sm mt-2">
-              How to be the best friend.
-            </p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div
-              class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10"
-            >
-              <div class="text-3xl mb-3">🎉</div>
-              <h3 class="font-heading font-bold text-lg mb-2">
-                Be happy for their success
-              </h3>
-              <p class="text-slate-300 text-sm leading-relaxed">
-                Always be glad when your friend wins or does something great.
-              </p>
+            <div class="inline-block bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs sm:text-sm font-medium px-4 py-2 rounded-xl mb-8 shadow-sm">
+                💻 Web page created by <strong class="text-purple-700">11-"A" class</strong>
             </div>
 
-            <div
-              class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10"
-            >
-              <div class="text-3xl mb-3">🤝</div>
-              <h3 class="font-heading font-bold text-lg mb-2">
-                Say sorry when you are wrong
-              </h3>
-              <p class="text-slate-300 text-sm leading-relaxed">
-                Saying sorry quickly fixes small fights and saves friendship.
-              </p>
+            <!-- Firebase Live Like Button -->
+            <div class="mb-8 flex justify-center">
+                <button onclick="handleLike()" class="inline-flex items-center gap-2 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-semibold px-6 py-3 rounded-2xl shadow-sm transition-all transform active:scale-95">
+                    <i data-lucide="heart" class="w-5 h-5 fill-rose-500 text-rose-500 animate-pulse"></i>
+                    <span>Support Campaign:</span>
+                    <span id="like-count" class="bg-rose-600 text-white text-xs px-2.5 py-1 rounded-full">...</span>
+                </button>
             </div>
 
-            <div
-              class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10"
-            >
-              <div class="text-3xl mb-3">⏳</div>
-              <h3 class="font-heading font-bold text-lg mb-2">
-                Spend time together
-              </h3>
-              <p class="text-slate-300 text-sm leading-relaxed">
-                Play games, talk, and spend free time with your friend.
-              </p>
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <a href="#rules" class="bg-slate-900 hover:bg-slate-800 text-white font-medium px-6 py-3.5 rounded-2xl shadow-lg transition-all flex items-center gap-2">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    Read Rules
+                </a>
+                <button onclick="togglePosterModal()" class="glass-card hover:bg-white text-slate-700 font-medium px-6 py-3.5 rounded-2xl border border-slate-200 shadow-sm transition-all flex items-center gap-2">
+                    <i data-lucide="layout-template" class="w-5 h-5 text-purple-600"></i>
+                    View Poster
+                </button>
             </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- 4. CAMPAIGN SPEECH SECTION -->
-      <section id="speech" class="py-16 px-4 sm:px-6 max-w-4xl mx-auto">
-        <div
-          class="glass-card rounded-3xl p-6 sm:p-10 border border-purple-200 shadow-xl"
-        >
-          <div
-            class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-200"
-          >
-            <div>
-              <span
-                class="text-purple-600 font-semibold text-xs uppercase tracking-wider"
-                >For Presentation</span
-              >
-              <h2
-                class="font-heading text-2xl sm:text-3xl font-bold text-slate-900"
-              >
-                Campaign Speech
-              </h2>
+        <!-- 2. FIVE RULES SECTION -->
+        <section id="rules" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-purple-600 font-semibold text-sm uppercase tracking-wider">Main Rules</span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-slate-900 mt-1">5 Friendship Rules</h2>
+                <p class="text-slate-600 mt-2 text-sm">Simple rules for a strong friendship.</p>
             </div>
 
-            <div class="flex items-center gap-2">
-              <button
-                id="tts-btn"
-                onclick="toggleSpeech()"
-                class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-md"
-              >
-                <i data-lucide="volume-2" id="tts-icon" class="w-4 h-4"></i>
-                <span id="tts-label">Listen</span>
-              </button>
-              <button
-                onclick="copySpeech()"
-                class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium px-3.5 py-2.5 rounded-xl"
-              >
-                <i data-lucide="copy" class="w-4 h-4"></i>
-                Copy
-              </button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center mb-5 font-bold text-xl">
+                        <i data-lucide="ear" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Rule 1</span>
+                    <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">Listen to your friend</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Always listen carefully when your friend is speaking to you.</p>
+                </div>
+
+                <div class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-5 font-bold text-xl">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Rule 2</span>
+                    <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">Always be honest</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Do not lie to your friend. Trust is very important.</p>
+                </div>
+
+                <div class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mb-5 font-bold text-xl">
+                        <i data-lucide="smile" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Rule 3</span>
+                    <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">Respect each other</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Respect your friend's personal space and choices.</p>
+                </div>
+
+                <div class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-5 font-bold text-xl">
+                        <i data-lucide="hand-heart" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-rose-600">Rule 4</span>
+                    <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">Help your friend</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Support your friend when they have problems or hard times.</p>
+                </div>
+
+                <div class="rule-card glass-card p-6 rounded-3xl border border-purple-100 shadow-sm sm:col-span-2 lg:col-span-1">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mb-5 font-bold text-xl">
+                        <i data-lucide="lock" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Rule 5</span>
+                    <h3 class="font-heading font-bold text-xl text-slate-900 mt-1 mb-2">Keep secrets safe</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Never tell your friend's secrets to other people.</p>
+                </div>
             </div>
-          </div>
+        </section>
 
-          <div
-            class="prose max-w-none text-slate-700 leading-relaxed text-base sm:text-lg bg-purple-50 p-6 rounded-2xl border border-purple-100"
-            id="speech-text"
-          >
-            "Hello everyone! Today we present our project called 'Be a Good
-            Friend!'. Friendship is very important in our life. To be a good
-            friend, we must help each other, listen carefully, and be kind. Let
-            us make our school a friendly place for everyone. Be kind, be
-            honest, and be a good friend! Thank you!"
-          </div>
-        </div>
-      </section>
+        <!-- RANDOM TIP GENERATOR -->
+        <section id="fortune" class="py-12 px-4 sm:px-6 max-w-3xl mx-auto text-center">
+            <div class="glass-card p-8 rounded-3xl border border-purple-200 shadow-lg space-y-4">
+                <span class="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-100 px-3 py-1 rounded-full">Interactive Feature</span>
+                <h3 class="font-heading font-bold text-2xl text-slate-900">Random Friendship Tip</h3>
+                <p id="fortune-text" class="text-slate-600 italic text-base">"Click the button below to get a daily friendship advice!"</p>
+                <button onclick="generateRandomTip()" class="bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-md transition-all">
+                    Get New Tip 💡
+                </button>
+            </div>
+        </section>
 
-      <!-- 5. INTERACTIVE QUIZ SECTION -->
-      <section id="quiz" class="py-16 px-4 sm:px-6 max-w-3xl mx-auto">
-        <div
-          class="glass-card rounded-3xl p-6 sm:p-10 border border-purple-200 shadow-xl"
-        >
-          <div class="text-center mb-8">
-            <span
-              class="bg-indigo-100 text-indigo-700 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider"
-              >Mini Test</span
-            >
-            <h2 class="font-heading text-3xl font-bold text-slate-900 mt-2">
-              Are You a Good Friend?
-            </h2>
-            <p class="text-slate-600 text-sm mt-1">
-              Answer 3 simple questions!
-            </p>
-          </div>
+        <!-- 3. THREE ADVICE SECTION -->
+        <section id="advice" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+            <div class="bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 rounded-3xl p-8 sm:p-12 text-white shadow-2xl">
+                <div class="text-center max-w-xl mx-auto mb-10">
+                    <span class="bg-purple-500/30 text-purple-200 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider border border-purple-400/30">Useful Tips</span>
+                    <h2 class="font-heading text-3xl sm:text-4xl font-bold mt-2">3 Good Tips</h2>
+                    <p class="text-slate-300 text-sm mt-2">How to be the best friend.</p>
+                </div>
 
-          <div id="quiz-container">
-            <div id="question-box" class="space-y-6">
-              <div
-                class="flex items-center justify-between text-xs font-semibold text-slate-500"
-              >
-                <span id="quiz-progress">Question 1 of 3</span>
-                <span
-                  id="quiz-score-badge"
-                  class="bg-purple-100 text-purple-700 px-2.5 py-1 rounded-lg"
-                  >Score: 0</span
-                >
-              </div>
-              <h3
-                id="quiz-question"
-                class="text-lg sm:text-xl font-heading font-bold text-slate-800"
-              >
-                Loading...
-              </h3>
-              <div id="quiz-options" class="space-y-3"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+                        <div class="text-3xl mb-3">🎉</div>
+                        <h3 class="font-heading font-bold text-lg mb-2">Be happy for their success</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">Always be glad when your friend wins or does something great.</p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+                        <div class="text-3xl mb-3">🤝</div>
+                        <h3 class="font-heading font-bold text-lg mb-2">Say sorry when you are wrong</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">Saying sorry quickly fixes small fights and saves friendship.</p>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+                        <div class="text-3xl mb-3">⏳</div>
+                        <h3 class="font-heading font-bold text-lg mb-2">Spend time together</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">Play games, talk, and spend free time with your friend.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CAMPAIGN SPEECH SECTION -->
+        <section id="speech" class="py-16 px-4 sm:px-6 max-w-4xl mx-auto">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-purple-200 shadow-xl">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-200">
+                    <div>
+                        <span class="text-purple-600 font-semibold text-xs uppercase tracking-wider">For Presentation</span>
+                        <h2 class="font-heading text-2xl sm:text-3xl font-bold text-slate-900">Campaign Speech</h2>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <button id="tts-btn" onclick="toggleSpeech()" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-md">
+                            <i data-lucide="volume-2" id="tts-icon" class="w-4 h-4"></i>
+                            <span id="tts-label">Listen</span>
+                        </button>
+                        <button onclick="copySpeech()" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium px-3.5 py-2.5 rounded-xl">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="prose max-w-none text-slate-700 leading-relaxed text-base sm:text-lg bg-purple-50 p-6 rounded-2xl border border-purple-100" id="speech-text">
+                    "Hello everyone! Today we present our project called 'Be a Good Friend!'. Friendship is very important in our life. To be a good friend, we must help each other, listen carefully, and be kind. Let us make our school a friendly place for everyone. Be kind, be honest, and be a good friend! Thank you!"
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. INTERACTIVE QUIZ SECTION -->
+        <section id="quiz" class="py-16 px-4 sm:px-6 max-w-3xl mx-auto">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-purple-200 shadow-xl">
+                <div class="text-center mb-8">
+                    <span class="bg-indigo-100 text-indigo-700 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Mini Test</span>
+                    <h2 class="font-heading text-3xl font-bold text-slate-900 mt-2">Are You a Good Friend?</h2>
+                    <p class="text-slate-600 text-sm mt-1">Answer 3 simple questions!</p>
+                </div>
+
+                <div id="quiz-container">
+                    <div id="question-box" class="space-y-6">
+                        <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                            <span id="quiz-progress">Question 1 of 3</span>
+                            <span id="quiz-score-badge" class="bg-purple-100 text-purple-700 px-2.5 py-1 rounded-lg">Score: 0</span>
+                        </div>
+                        <h3 id="quiz-question" class="text-lg sm:text-xl font-heading font-bold text-slate-800">
+                            Loading...
+                        </h3>
+                        <div id="quiz-options" class="space-y-3"></div>
+                    </div>
+
+                    <div id="quiz-result" class="hidden text-center py-6 space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mx-auto text-2xl font-bold">
+                            <i data-lucide="award" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="font-heading font-bold text-2xl text-slate-900" id="result-title">Great!</h3>
+                        <p class="text-slate-600 text-sm max-w-md mx-auto" id="result-desc">You are a very good friend!</p>
+                        <button onclick="resetQuiz()" class="inline-flex items-center gap-2 bg-purple-600 text-white font-medium px-5 py-2.5 rounded-xl hover:bg-purple-700 shadow-md">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TEAM MEMBERS SECTION -->
+        <section id="team" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-purple-600 font-semibold text-sm uppercase tracking-wider">Our Group</span>
+                <h2 class="font-heading text-3xl font-bold text-slate-900 mt-1">Team Members</h2>
+                <p class="text-slate-600 text-sm mt-1">Students who made this project.</p>
             </div>
 
-            <div id="quiz-result" class="hidden text-center py-6 space-y-4">
-              <div
-                class="w-16 h-16 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mx-auto text-2xl font-bold"
-              >
-                <i data-lucide="award" class="w-8 h-8"></i>
-              </div>
-              <h3
-                class="font-heading font-bold text-2xl text-slate-900"
-                id="result-title"
-              >
-                Great!
-              </h3>
-              <p
-                class="text-slate-600 text-sm max-w-md mx-auto"
-                id="result-desc"
-              >
-                You are a very good friend!
-              </p>
-              <button
-                onclick="resetQuiz()"
-                class="inline-flex items-center gap-2 bg-purple-600 text-white font-medium px-5 py-2.5 rounded-xl hover:bg-purple-700 shadow-md"
-              >
-                <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Try Again
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
+                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-xl">
+                        <i data-lucide="palette" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Baxtiyorov Elbek</h3>
+                    <p class="text-purple-600 text-xs font-semibold uppercase tracking-wider mb-2">Designer</p>
+                    <p class="text-slate-500 text-xs">Created design and slogans.</p>
+                </div>
 
-      <!-- 6. TEAM MEMBERS SECTION -->
-      <section id="team" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
-        <div class="text-center mb-12">
-          <span
-            class="text-purple-600 font-semibold text-sm uppercase tracking-wider"
-            >Our Group</span
-          >
-          <h2 class="font-heading text-3xl font-bold text-slate-900 mt-1">
-            Team Members
-          </h2>
-          <p class="text-slate-600 text-sm mt-1">
-            Students who made this project.
-          </p>
-        </div>
+                <div class="glass-card p-5 rounded-2xl border border-purple-300 bg-purple-50 text-center shadow-md">
+                    <div class="w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-xl shadow-md">
+                        <i data-lucide="code" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Igamberdiyev Jahongir</h3>
+                    <p class="text-indigo-600 text-xs font-semibold uppercase tracking-wider mb-2">Web Developer</p>
+                    <p class="text-slate-600 text-xs">Coded this web page.</p>
+                </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div
-            class="glass-card p-5 rounded-2xl border border-slate-200 text-center shadow-sm"
-          >
-            <div
-              class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-xl"
-            >
-              <i data-lucide="palette" class="w-7 h-7"></i>
-            </div>
-            <h3 class="font-heading font-bold text-lg text-slate-900">
-              Baxtiyorov Elbek
-            </h3>
-            <p
-              class="text-purple-600 text-xs font-semibold uppercase tracking-wider mb-2"
-            >
-              Designer
-            </p>
-            <p class="text-slate-500 text-xs">Created design and slogans.</p>
-          </div>
+                <div class="glass-card p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-xl">
+                        <i data-lucide="mic" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Jo'rayeva Sevinch</h3>
+                    <p class="text-emerald-600 text-xs font-semibold uppercase tracking-wider mb-2">Speaker</p>
+                    <p class="text-slate-500 text-xs">Prepared the speech.</p>
+                </div>
 
-          <div
-            class="glass-card p-5 rounded-2xl border border-purple-300 bg-purple-50 text-center shadow-md"
-          >
-            <div
-              class="w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-xl shadow-md"
-            >
-              <i data-lucide="code" class="w-7 h-7"></i>
+                <div class="glass-card p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
+                    <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-xl">
+                        <i data-lucide="search" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="font-heading font-bold text-lg text-slate-900">Maxmudova Xolida</h3>
+                    <p class="text-rose-600 text-xs font-semibold uppercase tracking-wider mb-2">Quiz Creator</p>
+                    <p class="text-slate-500 text-xs">Made questions and quiz.</p>
+                </div>
             </div>
-            <h3 class="font-heading font-bold text-lg text-slate-900">
-              Igamberdiyev Jahongir
-            </h3>
-            <p
-              class="text-indigo-600 text-xs font-semibold uppercase tracking-wider mb-2"
-            >
-              Web Developer
-            </p>
-            <p class="text-slate-600 text-xs">Coded this web page.</p>
-          </div>
-
-          <div
-            class="glass-card p-5 rounded-2xl border border-slate-200 text-center shadow-sm"
-          >
-            <div
-              class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-xl"
-            >
-              <i data-lucide="mic" class="w-7 h-7"></i>
-            </div>
-            <h3 class="font-heading font-bold text-lg text-slate-900">
-              Jo'rayeva Sevinch
-            </h3>
-            <p
-              class="text-emerald-600 text-xs font-semibold uppercase tracking-wider mb-2"
-            >
-              Speaker
-            </p>
-            <p class="text-slate-500 text-xs">Prepared the speech.</p>
-          </div>
-
-          <div
-            class="glass-card p-5 rounded-2xl border border-slate-200 text-center shadow-sm"
-          >
-            <div
-              class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-xl"
-            >
-              <i data-lucide="search" class="w-7 h-7"></i>
-            </div>
-            <h3 class="font-heading font-bold text-lg text-slate-900">
-              Maxmudova Xolida
-            </h3>
-            <p
-              class="text-rose-600 text-xs font-semibold uppercase tracking-wider mb-2"
-            >
-              Quiz Creator
-            </p>
-            <p class="text-slate-500 text-xs">Made questions and quiz.</p>
-          </div>
-        </div>
-      </section>
+        </section>
     </main>
 
     <!-- POSTER MODAL -->
-    <div
-      id="poster-modal"
-      class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4"
-    >
-      <div
-        class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative border border-slate-100"
-      >
-        <button
-          onclick="togglePosterModal()"
-          class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-100"
-        >
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
+    <div id="poster-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative border border-slate-100">
+            <button onclick="togglePosterModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-100">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
 
-        <div
-          class="bg-gradient-to-br from-purple-50 via-white to-rose-50 p-6 rounded-2xl border-2 border-purple-200 text-center space-y-4"
-        >
-          <div
-            class="inline-block bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest"
-          >
-            Poster
-          </div>
-          <h2
-            class="font-heading text-3xl font-black text-slate-900 tracking-tight"
-          >
-            BE A GOOD FRIEND!
-          </h2>
-          <p class="text-purple-700 font-semibold italic text-sm">
-            "Be a good friend, make a happy world!"
-          </p>
+            <div class="bg-gradient-to-br from-purple-50 via-white to-rose-50 p-6 rounded-2xl border-2 border-purple-200 text-center space-y-4">
+                <div class="inline-block bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Poster</div>
+                <h2 class="font-heading text-3xl font-black text-slate-900 tracking-tight">BE A GOOD FRIEND!</h2>
+                <p class="text-purple-700 font-semibold italic text-sm">"Be a good friend, make a happy world!"</p>
+                
+                <div class="text-left text-xs space-y-1 pt-2 border-t border-purple-100 text-slate-700">
+                    <p class="font-bold text-slate-900 text-sm">📋 5 Rules:</p>
+                    <ul class="list-disc pl-5 space-y-0.5">
+                        <li>Listen to your friend</li>
+                        <li>Always be honest</li>
+                        <li>Respect each other</li>
+                        <li>Help your friend</li>
+                        <li>Keep secrets safe</li>
+                    </ul>
+                </div>
 
-          <div
-            class="text-left text-xs space-y-1 pt-2 border-t border-purple-100 text-slate-700"
-          >
-            <p class="font-bold text-slate-900 text-sm">📋 5 Rules:</p>
-            <ul class="list-disc pl-5 space-y-0.5">
-              <li>Listen to your friend</li>
-              <li>Always be honest</li>
-              <li>Respect each other</li>
-              <li>Help your friend</li>
-              <li>Keep secrets safe</li>
-            </ul>
-          </div>
+                <div class="text-left text-xs space-y-1 pt-2 border-t border-purple-100 text-slate-700">
+                    <p class="font-bold text-slate-900 text-sm">💡 3 Tips:</p>
+                    <ul class="list-disc pl-5 space-y-0.5">
+                        <li>Be happy for their success</li>
+                        <li>Say sorry when wrong</li>
+                        <li>Spend time together</li>
+                    </ul>
+                </div>
+                
+                <div class="pt-2 text-xs text-slate-500 italic">
+                    Coded by Jahongir Igamberdiyev
+                </div>
+            </div>
 
-          <div
-            class="text-left text-xs space-y-1 pt-2 border-t border-purple-100 text-slate-700"
-          >
-            <p class="font-bold text-slate-900 text-sm">💡 3 Tips:</p>
-            <ul class="list-disc pl-5 space-y-0.5">
-              <li>Be happy for their success</li>
-              <li>Say sorry when wrong</li>
-              <li>Spend time together</li>
-            </ul>
-          </div>
-
-          <div class="pt-2 text-xs text-slate-500 italic">
-            Coded by Jahongir Igamberdiyev
-          </div>
+            <div class="mt-6 flex justify-end gap-3">
+                <button onclick="printPoster()" class="bg-purple-600 hover:bg-purple-700 text-white font-medium px-5 py-2.5 rounded-xl flex items-center gap-2 text-sm shadow-md">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Print Poster
+                </button>
+            </div>
         </div>
-
-        <div class="mt-6 flex justify-end gap-3">
-          <button
-            onclick="printPoster()"
-            class="bg-purple-600 hover:bg-purple-700 text-white font-medium px-5 py-2.5 rounded-xl flex items-center gap-2 text-sm shadow-md"
-          >
-            <i data-lucide="printer" class="w-4 h-4"></i> Print Poster
-          </button>
-        </div>
-      </div>
     </div>
 
+    <!-- 7. VISITOR COMMENTS SECTION -->
+      <section id="comments" class="py-16 px-4 sm:px-6 max-w-4xl mx-auto">
+        <div class="glass-card rounded-3xl p-6 sm:p-10 border border-purple-200 shadow-xl space-y-8">
+          <div class="text-center">
+            <span class="text-purple-600 font-semibold text-xs uppercase tracking-wider">Community Wall</span>
+            <h2 class="font-heading text-3xl font-bold text-slate-900 mt-1">Visitor Comments</h2>
+            <p class="text-slate-600 text-sm mt-1">Share your thoughts about our friendship campaign!</p>
+          </div>
+
+          <!-- Add Comment Form (id="comment-form-box" qo'shildi) -->
+          <form id="comment-form-box" onsubmit="handleCommentSubmit(event)" class="space-y-4 bg-purple-50/70 p-6 rounded-2xl border border-purple-100">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1 uppercase tracking-wider">Your Name</label>
+              <input type="text" id="comment-name" required placeholder="Enter your name..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-purple-500 transition-all">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1 uppercase tracking-wider">Your Comment</label>
+              <textarea id="comment-text" required rows="3" placeholder="Write a nice comment or review..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-purple-500 transition-all"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 text-sm">
+              <i data-lucide="send" class="w-4 h-4"></i> Post Comment
+            </button>
+          </form>
+
+          <!-- Comments List Container -->
+          <div class="space-y-4">
+            <h3 class="font-heading font-bold text-lg text-slate-900 border-b border-slate-200 pb-2">Recent Comments</h3>
+            <div id="comments-list" class="space-y-3 max-h-96 overflow-y-auto pr-2">
+              <p class="text-slate-400 text-sm italic text-center py-4">Loading comments...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
     <!-- Footer -->
-    <!-- Footer (Admin havolasi yashirildi) -->
-    <footer
-      class="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500"
-    >
-      <p>School Group Project • Option C</p>
-      <p class="mt-1">
-        Created by
-        <strong class="text-purple-700">Jahongir Igamberdiyev</strong>
-      </p>
+    <footer class="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500">
+        <p>School Group Project • Option C</p>
+        <p class="mt-1">Created by <strong class="text-purple-700">Jahongir Igamberdiyev</strong></p>
     </footer>
 
     <!-- JavaScript File Connection -->
     <script src="script.js"></script>
-  </body>
+</body>
 </html>
