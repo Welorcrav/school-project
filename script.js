@@ -308,11 +308,14 @@ async function loadComments() {
 }
 
 // Handle Like / Dislike Voting with Device Restriction
-async function voteComment(commentId, type) {
-    const voteKey = `voted_${commentId}`;
-    
-    if (localStorage.getItem(voteKey)) {
-        showToast("Siz bu izohga allaqachon ovoz bergansiz! ⚠️");
+// Handle Like / Dislike Voting with Switching Support
+async function voteComment(commentId, newType) {
+    const voteKey = `vote_type_${commentId}`; // 'likes' yoki 'dislikes' saqlanadi
+    const previousVote = localStorage.getItem(voteKey); // Oldin nima bosgani
+
+    // Agar foydalanuvchi aynan o'sha tugmani qayta bossa (masalan, yanalike)
+    if (previousVote === newType) {
+        showToast("Siz allaqachon bu tugmani bosgansiz! ⚠️");
         return;
     }
 
@@ -325,14 +328,36 @@ async function voteComment(commentId, type) {
                 throw new Error("Izoh topilmadi!");
             }
             
-            const currentVal = doc.data()[type] || 0;
-            transaction.update(commentRef, { [type]: currentVal + 1 });
+            let data = doc.data();
+            let likes = data.likes || 0;
+            let dislikes = data.dislikes || 0;
+
+            // Agar oldin boshqa narsa bosgan bo'lsa, o'shandan 1 ta ayiramiz
+            if (previousVote === 'likes') {
+                likes = Math.max(0, likes - 1);
+            } else if (previousVote === 'dislikes') {
+                dislikes = Math.max(0, dislikes - 1);
+            }
+
+            // Yangi ovozni qo'shamiz
+            if (newType === 'likes') {
+                likes += 1;
+            } else if (newType === 'dislikes') {
+                dislikes += 1;
+            }
+
+            // Bazaga yangilangan qiymatlarni yozamiz
+            transaction.update(commentRef, { 
+                likes: likes, 
+                dislikes: dislikes 
+            });
         });
 
-        localStorage.setItem(voteKey, "true");
+        // Yangi ovoz turini localStorage'ga saqlab qo'yamiz
+        localStorage.setItem(voteKey, newType);
 
-        showToast("Ovozingiz qabul qilindi! 🎉");
-        loadComments();
+        showToast("Ovozingiz o'zgartirildi! 🎉");
+        loadComments(); // Izohlarni yangilash
     } catch (e) {
         alert("Xatolik yuz berdi: " + e.message);
     }
